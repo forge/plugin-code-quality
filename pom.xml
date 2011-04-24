@@ -23,7 +23,7 @@
 
         <dependency>
             <groupId>org.jboss.seam.forge</groupId>
-            <artifactId>forge-project-model</artifactId>
+            <artifactId>forge-maven-api</artifactId>
             <version>${forge.api.version}</version>
         </dependency>
     </dependencies>

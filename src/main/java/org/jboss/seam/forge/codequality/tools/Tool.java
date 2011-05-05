@@ -1,5 +1,6 @@
 package org.jboss.seam.forge.codequality.tools;
 
-public interface Tool {
-    void installDependencies();
+public interface Tool
+{
+   void installDependencies();
 }

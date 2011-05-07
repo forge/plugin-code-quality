@@ -1,6 +1,5 @@
 package org.jboss.seam.forge.codequality.tools;
 
-
 import org.jboss.forge.maven.MavenPluginFacet;
 import org.jboss.forge.maven.plugins.MavenPluginBuilder;
 import org.jboss.forge.maven.plugins.MavenPluginConfigurationElementBuilder;
@@ -14,7 +13,7 @@ import org.jboss.seam.forge.codequality.tools.helpers.SitePluginHelper;
 import javax.inject.Inject;
 import java.util.List;
 
-public class FindBugs implements Tool
+public class CheckStyle implements Tool
 {
    @Inject
    Project project;
@@ -23,45 +22,38 @@ public class FindBugs implements Tool
    ShellPrompt prompt;
 
    @Inject
-   private SitePluginHelper sitePluginHelper;
+   SitePluginHelper sitePluginHelper;
 
    @Override
    public void installDependencies()
    {
-
       MavenPluginFacet pluginFacet = project.getFacet(MavenPluginFacet.class);
       DependencyFacet dependencyFacet = project.getFacet(DependencyFacet.class);
+      DependencyBuilder checkstyleDependencyBuilder = DependencyBuilder.create()
+              .setGroupId("org.apache.maven.plugins")
+              .setArtifactId("maven-checkstyle-plugin");
 
-      DependencyBuilder findbugsDependencyBuilder = DependencyBuilder.create()
-              .setGroupId("org.codehaus.mojo")
-              .setArtifactId("findbugs-maven-plugin");
+      List<Dependency> checkstyleVersions = dependencyFacet.resolveAvailableVersions(checkstyleDependencyBuilder);
+      Dependency checkstyleDependency = prompt.promptChoiceTyped("Which version of Checkstyle do you want to install?", checkstyleVersions, checkstyleVersions.get(checkstyleVersions.size() - 1));
 
-      List<Dependency> findBugsVersions = dependencyFacet.resolveAvailableVersions(findbugsDependencyBuilder);
-      Dependency findbugsDependency = prompt.promptChoiceTyped("Which version of FindBugs do you want to install?", findBugsVersions, findBugsVersions.get(findBugsVersions.size() - 1));
-
-      MavenPluginBuilder findbugsPlugin = MavenPluginBuilder.create()
-              .setDependency(findbugsDependency)
-              .createConfiguration()
-              .createConfigurationElement("xmlOutput")
-              .setText("true").getParentPluginConfig().getOrigin();
-
+      MavenPluginBuilder checkstylePlugin = MavenPluginBuilder.create()
+              .setDependency(checkstyleDependency);
 
       MavenPluginBuilder sitePlugin = sitePluginHelper.getOrCreateSitePlugin();
-      MavenPluginConfigurationElementBuilder reportPlugins;
 
+      MavenPluginConfigurationElementBuilder reportPlugins;
       if (sitePlugin.getConfig().hasConfigurationElement("reportPlugins"))
       {
          reportPlugins = MavenPluginConfigurationElementBuilder.createFromExisting(sitePlugin.getConfig().getConfigurationElement("reportPlugins"));
          sitePlugin.getConfig().removeConfigurationElement("reportPlugins");
-         reportPlugins.addChild(findbugsPlugin);
+         reportPlugins.addChild(checkstylePlugin);
          sitePlugin.getConfig().addConfigurationElement(reportPlugins);
       } else
       {
          reportPlugins = sitePlugin.createConfiguration().createConfigurationElement("reportPlugins");
-         reportPlugins.addChild(findbugsPlugin);
+         reportPlugins.addChild(checkstylePlugin);
       }
 
       pluginFacet.addPlugin(sitePlugin);
    }
-
 }

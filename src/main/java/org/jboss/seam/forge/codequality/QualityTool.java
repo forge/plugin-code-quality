@@ -1,11 +1,13 @@
 package org.jboss.seam.forge.codequality;
 
+import org.jboss.seam.forge.codequality.tools.CheckStyle;
 import org.jboss.seam.forge.codequality.tools.FindBugs;
 import org.jboss.seam.forge.codequality.tools.Tool;
 
 public enum QualityTool
 {
-   FINDBUGS(FindBugs.class);
+   FINDBUGS(FindBugs.class),
+   CHECKSTYLE(CheckStyle.class);
 
    private Class<? extends Tool> tool;
 

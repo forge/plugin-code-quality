@@ -1,0 +1,8 @@
+This plugin makes it easy to add code quality tools to your project. Currently only Findbugs and Checkstyle are supported, but support for other tools will be added soon.
+Use as follows:
+
+<pre><code>
+forge git-plugin https://github.com/forge/plugin-code-quality
+codequality setup --tool FINDBUGS
+codequality setup --tool CHECKSTYLE
+</code></pre>

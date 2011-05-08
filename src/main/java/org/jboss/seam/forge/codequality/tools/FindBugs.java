@@ -2,8 +2,8 @@ package org.jboss.seam.forge.codequality.tools;
 
 
 import org.jboss.forge.maven.MavenPluginFacet;
+import org.jboss.forge.maven.plugins.ConfigurationElementBuilder;
 import org.jboss.forge.maven.plugins.MavenPluginBuilder;
-import org.jboss.forge.maven.plugins.MavenPluginConfigurationElementBuilder;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.dependencies.Dependency;
 import org.jboss.forge.project.dependencies.DependencyBuilder;
@@ -47,11 +47,11 @@ public class FindBugs implements Tool
 
 
       MavenPluginBuilder sitePlugin = sitePluginHelper.getOrCreateSitePlugin();
-      MavenPluginConfigurationElementBuilder reportPlugins;
+      ConfigurationElementBuilder reportPlugins;
 
       if (sitePlugin.getConfig().hasConfigurationElement("reportPlugins"))
       {
-         reportPlugins = MavenPluginConfigurationElementBuilder.createFromExisting(sitePlugin.getConfig().getConfigurationElement("reportPlugins"));
+         reportPlugins = ConfigurationElementBuilder.createFromExisting(sitePlugin.getConfig().getConfigurationElement("reportPlugins"));
          sitePlugin.getConfig().removeConfigurationElement("reportPlugins");
          reportPlugins.addChild(findbugsPlugin);
          sitePlugin.getConfig().addConfigurationElement(reportPlugins);

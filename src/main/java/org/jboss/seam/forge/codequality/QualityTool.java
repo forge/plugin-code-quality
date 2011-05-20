@@ -1,23 +1,25 @@
 package org.jboss.seam.forge.codequality;
 
+import org.jboss.forge.project.Facet;
+import org.jboss.seam.forge.codequality.facets.CheckstyleFacet;
 import org.jboss.seam.forge.codequality.tools.CheckStyle;
 import org.jboss.seam.forge.codequality.tools.FindBugs;
 import org.jboss.seam.forge.codequality.tools.Tool;
 
 public enum QualityTool
 {
-   FINDBUGS(FindBugs.class),
-   CHECKSTYLE(CheckStyle.class);
 
-   private Class<? extends Tool> tool;
+   CHECKSTYLE(CheckstyleFacet.class);
 
-   public Class<? extends Tool> getTool()
+   private Class<? extends Facet> facet;
+
+   public Class<? extends Facet> getFacet()
    {
-      return tool;
+      return facet;
    }
 
-   private QualityTool(Class<? extends Tool> tool)
+   private QualityTool(Class<? extends Facet> facet)
    {
-      this.tool = tool;
+      this.facet = facet;
    }
 }

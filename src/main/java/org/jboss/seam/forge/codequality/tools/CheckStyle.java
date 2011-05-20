@@ -13,7 +13,7 @@ import org.jboss.seam.forge.codequality.tools.helpers.SitePluginHelper;
 import javax.inject.Inject;
 import java.util.List;
 
-public class CheckStyle implements Tool
+public class  CheckStyle implements Tool
 {
    @Inject
    Project project;

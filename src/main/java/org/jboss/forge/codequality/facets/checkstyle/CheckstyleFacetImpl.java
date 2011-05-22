@@ -1,4 +1,4 @@
-package org.jboss.seam.forge.codequality.facets.checkstyle;
+package org.jboss.forge.codequality.facets.checkstyle;
 
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.maven.MavenPluginFacet;
@@ -12,7 +12,7 @@ import org.jboss.forge.project.facets.ResourceFacet;
 import org.jboss.forge.shell.ShellPrompt;
 import org.jboss.forge.shell.plugins.Alias;
 import org.jboss.forge.shell.plugins.RequiresFacet;
-import org.jboss.seam.forge.codequality.facets.helpers.SitePluginHelper;
+import org.jboss.forge.codequality.facets.helpers.SitePluginHelper;
 
 import javax.inject.Inject;
 import java.util.List;

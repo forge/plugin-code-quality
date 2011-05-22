@@ -1,6 +1,5 @@
-package org.jboss.seam.forge.codequality.facets.helpers;
+package org.jboss.forge.codequality.facets.helpers;
 
-import com.sun.org.apache.xpath.internal.operations.Neg;
 import org.jboss.forge.maven.MavenPluginFacet;
 import org.jboss.forge.maven.plugins.ConfigurationElement;
 import org.jboss.forge.maven.plugins.MavenPluginBuilder;
@@ -10,7 +9,7 @@ import org.jboss.forge.project.dependencies.Dependency;
 import org.jboss.forge.project.dependencies.DependencyBuilder;
 import org.jboss.forge.project.facets.DependencyFacet;
 import org.jboss.forge.shell.ShellPrompt;
-import org.jboss.seam.forge.codequality.facets.ConfigurationElementNotFoundException;
+import org.jboss.forge.codequality.facets.ConfigurationElementNotFoundException;
 
 import javax.inject.Inject;
 import java.util.List;

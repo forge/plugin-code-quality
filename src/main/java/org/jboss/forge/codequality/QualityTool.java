@@ -1,8 +1,8 @@
-package org.jboss.seam.forge.codequality;
+package org.jboss.forge.codequality;
 
 import org.jboss.forge.project.Facet;
-import org.jboss.seam.forge.codequality.facets.checkstyle.CheckstyleFacet;
-import org.jboss.seam.forge.codequality.facets.findbugs.FindBugsFacet;
+import org.jboss.forge.codequality.facets.checkstyle.CheckstyleFacet;
+import org.jboss.forge.codequality.facets.findbugs.FindBugsFacet;
 
 public enum QualityTool
 {

@@ -1,4 +1,4 @@
-package org.jboss.seam.forge.codequality.plugins.checkstyle;
+package org.jboss.forge.codequality.plugins.checkstyle;
 
 public enum ConfigFileOptions
 {

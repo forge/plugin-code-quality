@@ -1,4 +1,4 @@
-package org.jboss.seam.forge.codequality.facets.findbugs;
+package org.jboss.forge.codequality.facets.findbugs;
 
 import org.jboss.forge.project.Facet;
 

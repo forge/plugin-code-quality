@@ -1,4 +1,4 @@
-package org.jboss.seam.forge.codequality;
+package org.jboss.forge.codequality;
 
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;

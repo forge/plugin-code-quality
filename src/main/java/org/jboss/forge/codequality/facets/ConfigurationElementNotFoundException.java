@@ -1,4 +1,4 @@
-package org.jboss.seam.forge.codequality.facets;
+package org.jboss.forge.codequality.facets;
 
 import org.jboss.forge.maven.plugins.ConfigurationElement;
 

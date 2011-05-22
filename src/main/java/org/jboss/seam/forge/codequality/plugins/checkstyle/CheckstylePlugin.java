@@ -2,7 +2,7 @@ package org.jboss.seam.forge.codequality.plugins.checkstyle;
 
 import org.jboss.forge.project.Project;
 import org.jboss.forge.shell.plugins.*;
-import org.jboss.seam.forge.codequality.facets.CheckstyleFacet;
+import org.jboss.seam.forge.codequality.facets.checkstyle.CheckstyleFacet;
 
 import javax.inject.Inject;
 

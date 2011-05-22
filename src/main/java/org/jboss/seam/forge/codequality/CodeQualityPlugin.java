@@ -1,11 +1,9 @@
 package org.jboss.seam.forge.codequality;
 
 import org.jboss.forge.maven.MavenCoreFacet;
-import org.jboss.forge.project.Facet;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.shell.events.InstallFacets;
 import org.jboss.forge.shell.plugins.*;
-import org.jboss.seam.forge.codequality.facets.CheckstyleFacet;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;

@@ -1,32 +1,68 @@
-package org.jboss.seam.forge.codequality.tools;
+package org.jboss.seam.forge.codequality.facets.findbugs;
 
-
+import org.codehaus.plexus.util.cli.shell.Shell;
+import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.maven.MavenPluginFacet;
+import org.jboss.forge.maven.plugins.Configuration;
 import org.jboss.forge.maven.plugins.ConfigurationElementBuilder;
+import org.jboss.forge.maven.plugins.MavenPlugin;
 import org.jboss.forge.maven.plugins.MavenPluginBuilder;
-import org.jboss.forge.project.Project;
 import org.jboss.forge.project.dependencies.Dependency;
 import org.jboss.forge.project.dependencies.DependencyBuilder;
+import org.jboss.forge.project.facets.BaseFacet;
 import org.jboss.forge.project.facets.DependencyFacet;
+import org.jboss.forge.project.facets.JavaSourceFacet;
+import org.jboss.forge.project.facets.ResourceFacet;
+import org.jboss.forge.shell.ShellPrintWriter;
 import org.jboss.forge.shell.ShellPrompt;
-import org.jboss.seam.forge.codequality.tools.helpers.SitePluginHelper;
+import org.jboss.forge.shell.plugins.Alias;
+import org.jboss.forge.shell.plugins.RequiresFacet;
+import org.jboss.seam.forge.codequality.facets.helpers.SitePluginHelper;
 
 import javax.inject.Inject;
 import java.util.List;
 
-public class FindBugs implements Tool
+@Alias("forge.codequality.findbugs")
+@RequiresFacet({ResourceFacet.class, MavenCoreFacet.class, JavaSourceFacet.class})
+public class FindbugsFacetImpl extends BaseFacet implements FindBugsFacet
 {
-   @Inject
-   Project project;
 
    @Inject
    ShellPrompt prompt;
 
+   @Inject ShellPrintWriter out;
+
    @Inject
    private SitePluginHelper sitePluginHelper;
 
-   @Override
-   public void installDependencies()
+   @Override public boolean install()
+   {
+      if(!isInstalled()) {
+         installDependencies();
+      }
+
+      return true;
+   }
+
+   @Override public boolean isInstalled()
+   {
+      MavenPluginFacet dependencyFacet = project.getFacet(MavenPluginFacet.class);
+      DependencyBuilder dependency = sitePluginHelper.createSitePluginDependency();
+
+      if (dependencyFacet.hasPlugin(dependency))
+      {
+         MavenPlugin plugin = dependencyFacet.getPlugin(dependency);
+         Configuration config = plugin.getConfig();
+         if (config.hasConfigurationElement("reportPlugins"))
+         {
+            return sitePluginHelper.hasConfigElementRecursive(config.getConfigurationElement("reportPlugins"), "findbugs-maven-plugin");
+         }
+      }
+
+      return false;
+   }
+
+   private void installDependencies()
    {
 
       MavenPluginFacet pluginFacet = project.getFacet(MavenPluginFacet.class);
@@ -63,5 +99,4 @@ public class FindBugs implements Tool
 
       pluginFacet.addPlugin(sitePlugin);
    }
-
 }

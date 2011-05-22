@@ -1,4 +1,4 @@
-package org.jboss.seam.forge.codequality.facets;
+package org.jboss.seam.forge.codequality.facets.checkstyle;
 
 import org.jboss.forge.project.Facet;
 

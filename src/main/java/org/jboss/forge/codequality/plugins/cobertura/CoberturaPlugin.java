@@ -23,4 +23,10 @@ public class CoberturaPlugin implements Plugin
 
    }
 
+   @Command(value = "setMaxMemoryConsumption")
+   public void setMaxMemoryConsumption(@Option(name = "maxMemoryInMB") int maxMemoryConsumption) {
+      CoberturaFacet coberturaFacet = project.getFacet(CoberturaFacet.class);
+      coberturaFacet.setMaxMemoryConsumption(maxMemoryConsumption);
+   }
+
 }

@@ -59,9 +59,9 @@ public class CoberturaFacetImpl extends BaseFacet implements CoberturaFacet
    {
       MavenPluginFacet pluginFacet = project.getFacet(MavenPluginFacet.class);
       DependencyBuilder dependency = sitePluginHelper.createSitePluginDependency();
-      MavenPlugin plugin = pluginFacet.getPlugin(dependency);
+      MavenPlugin sitePlugin = pluginFacet.getPlugin(dependency);
 
-      ConfigurationElementBuilder configuration = getConfiguration(plugin);
+      ConfigurationElementBuilder configuration = getConfiguration(sitePlugin);
       ConfigurationElementBuilder formats = getFormats(configuration);
 
       formats.addChild(
@@ -70,9 +70,24 @@ public class CoberturaFacetImpl extends BaseFacet implements CoberturaFacet
                       .setText(outputFormat.toString())
       );
 
-      updateSitePlugin(pluginFacet, plugin);
+      updateSitePlugin(pluginFacet, sitePlugin);
    }
 
+   @Override public void setMaxMemoryConsumption(int maxMemoryConsumption)
+   {
+      MavenPluginFacet pluginFacet = project.getFacet(MavenPluginFacet.class);
+      DependencyBuilder dependency = sitePluginHelper.createSitePluginDependency();
+      MavenPlugin sitePlugin = pluginFacet.getPlugin(dependency);
+      ConfigurationElementBuilder configuration = getConfiguration(sitePlugin);
+      if(configuration.hasChildByName("maxmem")) {
+         ConfigurationElementBuilder maxmem = (ConfigurationElementBuilder)configuration.getChildByName("maxmem");
+         maxmem.setText(maxMemoryConsumption + "m");
+      } else {
+         configuration.addChild("maxmem").setText(maxMemoryConsumption + "m");
+      }
+
+      updateSitePlugin(pluginFacet, sitePlugin);
+   }
 
    private ConfigurationElementBuilder getFormats(ConfigurationElementBuilder configuration)
    {
@@ -105,10 +120,10 @@ public class CoberturaFacetImpl extends BaseFacet implements CoberturaFacet
       return configuration;
    }
 
-   private void updateSitePlugin(MavenPluginFacet pluginFacet, MavenPlugin plugin)
+   private void updateSitePlugin(MavenPluginFacet pluginFacet, MavenPlugin sitePlugin)
    {
       pluginFacet.removePlugin(sitePluginHelper.createSitePluginDependency());
-      pluginFacet.addPlugin(plugin);
+      pluginFacet.addPlugin(sitePlugin);
    }
 
    private void installDependencies()

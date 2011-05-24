@@ -3,7 +3,6 @@ package org.jboss.forge.codequality.facets.findbugs;
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.maven.MavenPluginFacet;
 import org.jboss.forge.maven.plugins.Configuration;
-import org.jboss.forge.maven.plugins.ConfigurationElementBuilder;
 import org.jboss.forge.maven.plugins.MavenPlugin;
 import org.jboss.forge.maven.plugins.MavenPluginBuilder;
 import org.jboss.forge.project.dependencies.Dependency;
@@ -54,7 +53,7 @@ public class FindbugsFacetImpl extends BaseFacet implements FindBugsFacet
          Configuration config = plugin.getConfig();
          if (config.hasConfigurationElement("reportPlugins"))
          {
-            return sitePluginHelper.hasConfigElementRecursive(config.getConfigurationElement("reportPlugins"), "findbugs-maven-plugin");
+            return config.getConfigurationElement("reportPlugins").hasChildByContent("findbugs-maven-plugin");
          }
       }
 
@@ -63,8 +62,6 @@ public class FindbugsFacetImpl extends BaseFacet implements FindBugsFacet
 
    private void installDependencies()
    {
-
-      MavenPluginFacet pluginFacet = project.getFacet(MavenPluginFacet.class);
       DependencyFacet dependencyFacet = project.getFacet(DependencyFacet.class);
 
       DependencyBuilder findbugsDependencyBuilder = DependencyBuilder.create()
@@ -81,21 +78,7 @@ public class FindbugsFacetImpl extends BaseFacet implements FindBugsFacet
               .setText("true").getParentPluginConfig().getOrigin();
 
 
-      MavenPluginBuilder sitePlugin = sitePluginHelper.getOrCreateSitePlugin();
-      ConfigurationElementBuilder reportPlugins;
-
-      if (sitePlugin.getConfig().hasConfigurationElement("reportPlugins"))
-      {
-         reportPlugins = ConfigurationElementBuilder.createFromExisting(sitePlugin.getConfig().getConfigurationElement("reportPlugins"));
-         sitePlugin.getConfig().removeConfigurationElement("reportPlugins");
-         reportPlugins.addChild(findbugsPlugin);
-         sitePlugin.getConfig().addConfigurationElement(reportPlugins);
-      } else
-      {
-         reportPlugins = sitePlugin.createConfiguration().createConfigurationElement("reportPlugins");
-         reportPlugins.addChild(findbugsPlugin);
-      }
-
-      pluginFacet.addPlugin(sitePlugin);
+      sitePluginHelper.updateSitePlugin(findbugsPlugin);
    }
+
 }

@@ -1,5 +1,7 @@
-package org.jboss.forge.codequality.facets.checkstyle;
+package org.jboss.forge.codequality.facets.cobertura;
 
+import org.jboss.forge.codequality.facets.helpers.SitePluginHelper;
+import org.jboss.forge.codequality.plugins.cobertura.OutputFormat;
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.maven.MavenPluginFacet;
 import org.jboss.forge.maven.plugins.*;
@@ -12,27 +14,23 @@ import org.jboss.forge.project.facets.ResourceFacet;
 import org.jboss.forge.shell.ShellPrompt;
 import org.jboss.forge.shell.plugins.Alias;
 import org.jboss.forge.shell.plugins.RequiresFacet;
-import org.jboss.forge.codequality.facets.helpers.SitePluginHelper;
 
 import javax.inject.Inject;
 import java.util.List;
 
-@Alias("forge.codequality.checkstyle")
+@Alias("forge.codequality.cobertura")
 @RequiresFacet({ResourceFacet.class, MavenCoreFacet.class, JavaSourceFacet.class})
-public class CheckstyleFacetImpl extends BaseFacet implements CheckstyleFacet
+public class CoberturaFacetImpl extends BaseFacet implements CoberturaFacet
 {
+   @Inject SitePluginHelper sitePluginHelper;
    @Inject
    ShellPrompt prompt;
-
-   @Inject
-   SitePluginHelper sitePluginHelper;
 
    @Override public boolean install()
    {
       if (!isInstalled())
       {
          installDependencies();
-         return true;
       }
 
       return true;
@@ -49,35 +47,21 @@ public class CheckstyleFacetImpl extends BaseFacet implements CheckstyleFacet
          Configuration config = plugin.getConfig();
          if (config.hasConfigurationElement("reportPlugins"))
          {
-            return config.getConfigurationElement("reportPlugins").hasChildByContent("maven-checkstyle-plugin");
+            return config.getConfigurationElement("reportPlugins").hasChildByContent("cobertura-maven-plugin");
          }
       }
 
       return false;
    }
 
-   @Override public void setConfigLocation(String location)
+   @Override public void addOutputFormat(OutputFormat outputFormat)
    {
       MavenPluginFacet pluginFacet = project.getFacet(MavenPluginFacet.class);
       DependencyBuilder dependency = sitePluginHelper.createSitePluginDependency();
       MavenPlugin plugin = pluginFacet.getPlugin(dependency);
       ConfigurationElement reportPlugins = plugin.getConfig().getConfigurationElement("reportPlugins");
-      ConfigurationElement checkstyleElement = reportPlugins.getChildByContent("maven-checkstyle-plugin");
-      ConfigurationElementBuilder configurationElement = (ConfigurationElementBuilder) checkstyleElement;
-
-      ConfigurationElementBuilder configuration;
-      if(configurationElement.hasChildByName("configuration")) {
-         configuration = (ConfigurationElementBuilder) configurationElement.getChildByName("configuration");
-      } else {
-         configuration = ConfigurationElementBuilder.create().setName("configuration");
-         configurationElement.addChild(configuration);
-      }
-
-      configuration.addChild(
-              ConfigurationElementBuilder.create()
-                      .setName("configlocation")
-                      .setText(location)
-      );
+      ConfigurationElement coberturaElement = reportPlugins.getChildByContent("cobertura-maven-plugin");
+      ConfigurationElementBuilder configurationElement = (ConfigurationElementBuilder) coberturaElement;
 
 
       pluginFacet.removePlugin(sitePluginHelper.createSitePluginDependency());
@@ -87,16 +71,15 @@ public class CheckstyleFacetImpl extends BaseFacet implements CheckstyleFacet
    private void installDependencies()
    {
       DependencyFacet dependencyFacet = project.getFacet(DependencyFacet.class);
-      DependencyBuilder checkstyleDependencyBuilder = DependencyBuilder.create()
-              .setGroupId("org.apache.maven.plugins")
-              .setArtifactId("maven-checkstyle-plugin");
+      DependencyBuilder coberturaDependencyBuilder = DependencyBuilder.create()
+              .setGroupId("org.codehaus.mojo")
+              .setArtifactId("cobertura-maven-plugin");
 
-      List<Dependency> checkstyleVersions = dependencyFacet.resolveAvailableVersions(checkstyleDependencyBuilder);
-      Dependency checkstyleDependency = prompt.promptChoiceTyped("Which version of Checkstyle do you want to install?", checkstyleVersions, checkstyleVersions.get(checkstyleVersions.size() - 1));
+      List<Dependency> coberturaVersions = dependencyFacet.resolveAvailableVersions(coberturaDependencyBuilder);
+      Dependency coberturaDependency = prompt.promptChoiceTyped("Which version of Cobertura do you want to install?", coberturaVersions, coberturaVersions.get(coberturaVersions.size() - 1));
 
-      MavenPluginBuilder checkstylePlugin = MavenPluginBuilder.create()
-              .setDependency(checkstyleDependency);
-      sitePluginHelper.updateSitePlugin(checkstylePlugin);
+      MavenPluginBuilder coberturaPlugin = MavenPluginBuilder.create()
+              .setDependency(coberturaDependency);
+      sitePluginHelper.updateSitePlugin(coberturaPlugin);
    }
-
 }

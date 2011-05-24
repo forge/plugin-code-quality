@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 @Alias("cobertura")
 @RequiresFacet(CoberturaFacet.class)
-public class CoberturaPlugin
+public class CoberturaPlugin implements Plugin
 {
    @Inject Project project;
 

@@ -13,6 +13,7 @@ import org.jboss.forge.project.facets.JavaSourceFacet;
 import org.jboss.forge.project.facets.ResourceFacet;
 import org.jboss.forge.shell.ShellPrompt;
 import org.jboss.forge.shell.plugins.Alias;
+import org.jboss.forge.shell.plugins.Plugin;
 import org.jboss.forge.shell.plugins.RequiresFacet;
 
 import javax.inject.Inject;
@@ -59,11 +60,53 @@ public class CoberturaFacetImpl extends BaseFacet implements CoberturaFacet
       MavenPluginFacet pluginFacet = project.getFacet(MavenPluginFacet.class);
       DependencyBuilder dependency = sitePluginHelper.createSitePluginDependency();
       MavenPlugin plugin = pluginFacet.getPlugin(dependency);
+
+      ConfigurationElementBuilder configuration = getConfiguration(plugin);
+      ConfigurationElementBuilder formats = getFormats(configuration);
+
+      formats.addChild(
+              ConfigurationElementBuilder.create()
+                      .setName("format")
+                      .setText(outputFormat.toString())
+      );
+
+      updateSitePlugin(pluginFacet, plugin);
+   }
+
+
+   private ConfigurationElementBuilder getFormats(ConfigurationElementBuilder configuration)
+   {
+      ConfigurationElementBuilder formats;
+      if (configuration.hasChildByName("formats"))
+      {
+         formats = (ConfigurationElementBuilder) configuration.getChildByName("formats");
+      } else
+      {
+         formats = configuration.addChild("formats");
+      }
+      return formats;
+   }
+
+
+   private ConfigurationElementBuilder getConfiguration(MavenPlugin plugin)
+   {
       ConfigurationElement reportPlugins = plugin.getConfig().getConfigurationElement("reportPlugins");
-      ConfigurationElement coberturaElement = reportPlugins.getChildByContent("cobertura-maven-plugin");
-      ConfigurationElementBuilder configurationElement = (ConfigurationElementBuilder) coberturaElement;
+      ConfigurationElementBuilder coberturaElement = (ConfigurationElementBuilder) reportPlugins.getChildByContent("cobertura-maven-plugin");
 
+      ConfigurationElementBuilder configuration;
+      if (coberturaElement.hasChildByName("configuration"))
+      {
+         configuration = (ConfigurationElementBuilder) coberturaElement.getChildByName("configuration");
+      } else
+      {
+         configuration = ConfigurationElementBuilder.create().setName("configuration");
+         coberturaElement.addChild(configuration);
+      }
+      return configuration;
+   }
 
+   private void updateSitePlugin(MavenPluginFacet pluginFacet, MavenPlugin plugin)
+   {
       pluginFacet.removePlugin(sitePluginHelper.createSitePluginDependency());
       pluginFacet.addPlugin(plugin);
    }

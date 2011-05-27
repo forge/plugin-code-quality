@@ -2,7 +2,7 @@ package org.jboss.forge.codequality;
 
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
-import org.jboss.forge.shell.events.InstallFacets;
+import org.jboss.forge.project.facets.events.InstallFacets;
 import org.jboss.forge.shell.plugins.*;
 
 import javax.enterprise.event.Event;

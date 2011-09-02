@@ -10,19 +10,16 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>javax.enterprise</groupId>
-      <artifactId>cdi-api</artifactId>
-      <version>1.0-SP4</version>
-    </dependency>
-    <dependency>
       <groupId>org.jboss.forge</groupId>
       <artifactId>forge-shell-api</artifactId>
-      <version>${forge.api.version}</version>
+      <version>1.0.0-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.forge</groupId>
       <artifactId>forge-maven-api</artifactId>
-      <version>${forge.api.version}</version>
+      <version>1.0.0-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <repositories>
